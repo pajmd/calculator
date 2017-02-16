@@ -1,9 +1,9 @@
 import unittest
 #from calculator.parser import parse
-from parser import get_operator
-from parser import locate_error
-from parser import calculate
-from token_items import Token
+from ..parser import get_operator
+from ..parser import locate_error
+from ..parser import calculate
+from ..token_items import Token
 #import ..parser
 
 class TestCalculatorParser(unittest.TestCase):

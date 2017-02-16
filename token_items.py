@@ -57,3 +57,12 @@ class Token(object):
     def __hash__(self):
         return hash(self.token_type, self.val)
 
+
+class TokenNum(Token):
+    def __init__(self, val):
+        super(TokenNum, self).__init__('NUM', val)
+
+
+class TokenOp(Token):
+    def __init__(self, val):
+        super(TokenOp, self).__init__('OP', val)
