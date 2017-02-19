@@ -14,17 +14,21 @@ class Token(object):
         self.token_type = token_type
         self.val = val
 
-    def is_number(self):
-        return self.token_type == NUM
-
-    def is_argument(self):
-        return self.token_type == ARG
+    def argument_to_function(self, op):
+        self.token_type = OP
+        self.val = op
 
     def get_precedence(self):
         if self.token_type == OP:
             return self.val.precedence
         else:
             return None
+
+    def is_number(self):
+        return self.token_type == NUM
+
+    def is_argument(self):
+        return self.token_type == ARG
 
     def is_right_parenthesis(self):
         if self.token_type == OP:
@@ -76,4 +80,4 @@ class TokenOp(Token):
 
 class TokenArg(Token):
     def __init__(self, val):
-        super(TokenOp, self).__init__(ARG, val)
+        super(TokenArg, self).__init__(ARG, val)

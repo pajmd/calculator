@@ -2,6 +2,7 @@ from .operators import operators
 from .operator import Operator
 from .token_items import TokenNum
 from .token_items import TokenOp
+from .token_items import TokenArg
 
 
 def get_operator(op):
@@ -10,10 +11,16 @@ def get_operator(op):
     return None
 
 
-def push_previous_token_if_function_to_function_stack(tokens, function_stack):
+def push_previous_token_if_argument_to_function_stack(tokens, function_stack):
     len_tokens = len(tokens)
     if len_tokens - 1 > 0:  # (
-        if tokens[len_tokens - 2].is_function():
+        if tokens[len_tokens - 2].is_argument():
+            # make it a function
+            function_operator = Operator(name=tokens[len_tokens - 2].val,
+                                         precedence=2, arity=0,
+                                         associativity='L',
+                                         calculate=None, function='Y')
+            tokens[len_tokens - 2].argument_to_function(function_operator)
             function_stack.append(tokens[len_tokens - 2])
             return True
     return False
@@ -67,12 +74,13 @@ def set_token_attriutes(tok, tokens):
         raise SyntaxError('Mathincg parenthesis, or comma impossible to set arity function: ' + tok.val.name)
     tok.val.arity = arity
 
+
 def tokenize(infix_expression):
     tokens = []
     function_stack = []
-    building_function = False
+    is_building_argument = False
     building_function_arity = 0
-    building_function_name = ''
+    building_argument = ''
 
     for c in infix_expression:
         if str.isdigit(c):
@@ -93,29 +101,35 @@ def tokenize(infix_expression):
                 tokens.append(TokenOp(operators[c]))
                 if operators[c].name == '(':
                     # if token before ( is a function push it on function stack to determine arity later
-                    if push_previous_token_if_function_to_function_stack(tokens, function_stack) is True:
-                        building_function = False
-                        building_function_name = ''
-                    building_function_arity = 0 # check no longer needed
-                elif operators[c].name == ',': # check no longer needed
-                    building_function_arity += 1 # check no longer needed
+                    if push_previous_token_if_argument_to_function_stack(tokens, function_stack) is True:
+                        is_building_argument = False
+                        building_argument = ''
+                    building_function_arity = 0  # check no longer needed
+                elif operators[c].name == ',':  # check no longer needed
+                    building_function_arity += 1  # check no longer needed
                 elif operators[c].name == ')':
                     # look for the previous (, if just before this ( there is a function, set the attributes of the function
                     tok = parse_back(tokens)
                     if tok.is_function() is True:
                         set_token_attriutes(tok, tokens)
-                elif building_function is True:
+                elif is_building_argument is True:
                     # while building a function we can only get a number, a ( or a )
-                    raise SyntaxError('Syntax error builing function: ' + building_function_name +'>'+c+'<')
+                    raise SyntaxError('Error builing argument/function: ' + building_argument + '>' + c + '<')
             else:
-                if len(tokens) != 0 and tokens[len(tokens) - 1].is_function() is True:
-                    tokens[len(tokens) - 1].val.name += c
-                    building_function_name = tokens[len(tokens) - 1].val.name
+                # if len(tokens) != 0 and tokens[len(tokens) - 1].is_function() is True:
+                #     tokens[len(tokens) - 1].val.name += c
+                #     building_function_name = tokens[len(tokens) - 1].val.name
+                # else:
+                #     building_function = True
+                #     building_function_name = c
+                #     function_operator = Operator(name=c, precedence=2, arity=0, associativity='L', calculate=None, function='Y')
+                #     tokens.append(TokenOp(function_operator))
+                if len(tokens) != 0 and tokens[len(tokens) - 1].is_argument() is True:
+                    tokens[len(tokens) - 1].val += c
+                    building_argument = tokens[len(tokens) - 1].val
                 else:
-                    building_function = True
-                    building_function_name = c
-                    function_operator = Operator(name=c, precedence=2, arity=0, associativity='L', calculate=None, function='Y')
-                    tokens.append(TokenOp(function_operator))
+                    is_building_argument = True
+                    building_argument = c
+                    tokens.append(TokenArg(building_argument))
 
     return tokens
-
