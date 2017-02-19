@@ -9,6 +9,6 @@ operators = {
     '(': Operator(name='(', precedence=0, arity=0, associativity='L', calculate=functions.nothing),
     ')': Operator(name=')', precedence=0, arity=0, associativity='L', calculate=functions.nothing),
     ',': Operator(name=',', precedence=0, arity=0, associativity='L', calculate=functions.nothing),
-    'max': Operator(name='max', precedence=3, arity=2, associativity='L', calculate=functions.max, function='Y'),
-    'sum': Operator(name='sum', precedence=3, arity=0, associativity='L', calculate=functions.sum, function='Y')
+    'max': Operator(name='max', precedence=4, arity=2, associativity='L', calculate=functions.max, function='Y'),
+    'sum': Operator(name='sum', precedence=4, arity=0, associativity='L', calculate=functions.sum, function='Y')
 }

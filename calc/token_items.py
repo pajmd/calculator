@@ -50,6 +50,8 @@ class Token(object):
         token_val = ''
         if self.token_type == NUM:
             token_val = self.val
+        elif self.token_type == ARG:
+            token_val = self.val
         else:
             token_val = self.val.name
         return 'Token( {}, "{}")'.format(self.token_type, token_val)

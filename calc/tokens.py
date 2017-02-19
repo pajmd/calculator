@@ -14,7 +14,7 @@ class Tokens(object):
         return self.tokens.__iter__()
 
     def __repr__(self):
-        return self.tokens
+        return self.tokens.__repr__()
 
     def append(self,token):
         if isinstance(token, Token):

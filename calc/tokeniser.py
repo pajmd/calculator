@@ -36,7 +36,7 @@ def parse_back(tokens):
             if tokens[len_tokens].is_left_parenthesis() is True:
                 counter -= 1
                 if counter == 0:
-                    if len_tokens - 1 > 0 and tokens[len_tokens - 1].is_function():
+                    if len_tokens - 1 >= 0 and tokens[len_tokens - 1].is_function():
                         return tokens[len_tokens - 1]
                     else:
                         return tokens[len_tokens]
@@ -85,7 +85,8 @@ def tokenize(infix_expression):
 
     for c in infix_expression:
         if str.isdigit(c):
-            if len(tokens) != 0 and tokens.is_last_token_number() is True:
+            if len(tokens) != 0 and (tokens.is_last_token_number() is True or
+                                             tokens.is_last_token_argument() is True):
                 tokens.last_token_concatenate_value(c)
             else:
                 tokens.append(TokenNum(c))
@@ -99,12 +100,14 @@ def tokenize(infix_expression):
         else:
             operator = get_operator(c)
             if operator is not None:
+                is_building_argument = False
+                building_argument = ''
                 tokens.append(TokenOp(operators[c]))
                 if operators[c].name == '(':
                     # if token before ( is a function push it on function stack to determine arity later
-                    if push_previous_token_if_argument_to_function_stack(tokens, function_stack) is True:
-                        is_building_argument = False
-                        building_argument = ''
+                    push_previous_token_if_argument_to_function_stack(tokens, function_stack)
+                    #    is_building_argument = False
+                    #    building_argument = ''
                     building_function_arity = 0  # check no longer needed
                 elif operators[c].name == ',':  # check no longer needed
                     building_function_arity += 1  # check no longer needed

@@ -7,7 +7,7 @@ def infix_to_rpn(tokens):
     token_count = 0
 
     for token in tokens:
-        if token.is_number() is True:
+        if token.is_number() is True or token.is_argument():
             output_queue.append(token)
         else:
             output_stack_len = len(output_stack)

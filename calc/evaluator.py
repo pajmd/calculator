@@ -7,7 +7,7 @@ def evaluate_rpn(output_queue):
     """
     stack = []
     for token in output_queue:
-        if token.is_number() is True:
+        if token.is_number() is True or token.is_argument():
             stack.append(token)
         elif token.is_separator():
             continue
