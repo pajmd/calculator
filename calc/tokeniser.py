@@ -85,13 +85,13 @@ def tokenize(infix_expression):
 
     for c in infix_expression:
         if str.isdigit(c):
-            if len(tokens) != 0 and tokens[len(tokens) - 1].is_number() is True:
-                tokens[len(tokens) - 1].val += c
+            if len(tokens) != 0 and tokens.is_last_token_number() is True:
+                tokens.last_token_concatenate_value(c)
             else:
                 tokens.append(TokenNum(c))
         elif c == '.':
-            if len(tokens) != 0 and tokens[len(tokens) - 1].is_number() is True:
-                tokens[len(tokens) - 1].val += c
+            if len(tokens) != 0 and tokens.is_last_token_number() is True:
+                tokens.last_token_concatenate_value(c)
             else:
                 tokens.append(TokenNum('0.'))
         elif c in [' ', '\t']:
@@ -125,9 +125,9 @@ def tokenize(infix_expression):
                 #     building_function_name = c
                 #     function_operator = Operator(name=c, precedence=2, arity=0, associativity='L', calculate=None, function='Y')
                 #     tokens.append(TokenOp(function_operator))
-                if len(tokens) != 0 and tokens[len(tokens) - 1].is_argument() is True:
-                    tokens[len(tokens) - 1].val += c
-                    building_argument = tokens[len(tokens) - 1].val
+                if len(tokens) != 0 and tokens.is_last_token_argument() is True:
+                    tokens.last_token_concatenate_value(c)
+                    building_argument = tokens.last_token_value()
                 else:
                     is_building_argument = True
                     building_argument = c
