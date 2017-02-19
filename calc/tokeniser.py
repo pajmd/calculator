@@ -3,6 +3,7 @@ from .operator import Operator
 from .token_items import TokenNum
 from .token_items import TokenOp
 from .token_items import TokenArg
+from .tokens import Tokens
 
 
 def get_operator(op):
@@ -76,7 +77,7 @@ def set_token_attriutes(tok, tokens):
 
 
 def tokenize(infix_expression):
-    tokens = []
+    tokens = Tokens()
     function_stack = []
     is_building_argument = False
     building_function_arity = 0
