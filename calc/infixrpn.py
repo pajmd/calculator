@@ -28,7 +28,7 @@ def infix_to_rpn(tokens):
                                       locate_error(tokens, token_count))
             elif token.is_right_parenthesis():
                 left_parenthesis_found = False
-                for tkn in output_stack:
+                while len(output_stack) != 0:
                     pop_tkn = output_stack.pop()
                     if pop_tkn.is_left_parenthesis():
                         left_parenthesis_found = True

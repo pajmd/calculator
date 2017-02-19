@@ -27,7 +27,7 @@ class TestCalculatorParser(unittest.TestCase):
         res = calculate(expression)
         self.assertEqual(Token('NUM', '315.0'), res)
 
-    def test_simple_calculate_with_function_arity_gt_2(self):
+    def test_calculate_with_function_arity_gt_2(self):
         expression = '9+24/(7-3)+max(100,sum(200,100))+sum(1,2,3,4,5)'
         res = calculate(expression)
         self.assertEqual(Token('NUM', '330.0'), res)
@@ -35,7 +35,12 @@ class TestCalculatorParser(unittest.TestCase):
     def test_simple_calculate_starting_with_parenthesis(self):
         expression = '(9+24/(7-3))*2'
         res = calculate(expression)
-        self.assertEqual(Token('NUM', '15.0'), res)
+        self.assertEqual(Token('NUM', '30.0'), res)
+
+    def test_calculate_with_function_arity_gt_2_starting_with_parenthesis(self):
+        expression = '(9+24/(7-3)+max(100,sum(200,100))+sum(1,2,3,4,5))*(5-3)'
+        res = calculate(expression)
+        self.assertEqual(Token('NUM', '660.0'), res)
 
 if __name__ == '__main__':
     unittest.main()
