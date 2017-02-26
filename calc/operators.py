@@ -1,6 +1,7 @@
 import functions
 from .operator import Operator
 
+# TODO add unary operator - for -1+1 or -AAA+1
 operators = {
     '+': Operator(name='+', precedence=2, arity=2, associativity='L', calculate=functions.add),
     '-': Operator(name='-', precedence=2, arity=2, associativity='L', calculate=functions.substact),

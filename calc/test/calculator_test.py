@@ -14,8 +14,9 @@ class TestCalculatorParser(unittest.TestCase):
             'CCC' : '3',
             'D4' : '4',
             'E55' : '5',
-            'SERIES1' : ['1', '2', '3'],
-            'SERIES2': ['11', '12', '13']
+            'SERIES1' : ['1', '12', '3'],
+            'SERIES2': ['11', '2', '13'],
+            'SERIES3': ['10', '100', '1000']
         }
         DataStore(dico)
 #    def test_should_be_able_to_parse(self):
@@ -86,6 +87,24 @@ class TestCalculatorParser(unittest.TestCase):
         expression = 'SERIES1+SERIES2'
         res = calculate(expression)
         expected = ['12.0', '14.0', '16.0']
+        self.assertEqual(Token('NUM', expected), res)
+
+    def test_max_two_series_variables(self):
+        expression = 'max(SERIES1,SERIES2)'
+        res = calculate(expression)
+        expected = ['11.0', '12.0', '13.0']
+        self.assertEqual(Token('NUM', expected), res)
+
+    def test_sum_two_series_variables(self):
+        expression = 'sum(SERIES1,SERIES2)'
+        res = calculate(expression)
+        expected = ['12.0', '14.0', '16.0']
+        self.assertEqual(Token('NUM', expected), res)
+
+    def test_sum_three_series_variables(self):
+        expression = 'sum(SERIES1,SERIES2,SERIES3)'
+        res = calculate(expression)
+        expected = ['22.0', '114.0', '1016.0']
         self.assertEqual(Token('NUM', expected), res)
 
 if __name__ == '__main__':
